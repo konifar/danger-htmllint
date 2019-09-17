@@ -98,5 +98,37 @@ module Danger
         end
       end
     end
+
+    describe ".target_files" do
+      subject(:targets) do
+        @htmllint.send(:target_files)
+      end
+
+      context "when target_files are empty" do
+        it "is empty" do
+          expect(targets.size).to eq(0)
+        end
+      end
+
+      context "when target_files have 2 html files" do
+        before do
+          allow(@htmllint.git).to receive(:modified_files).and_return(%w(index.html app/index.html))
+        end
+
+        it "has 2 items" do
+          expect(targets.size).to eq(2)
+        end
+      end
+
+      context "when target_files have yml file" do
+        before do
+          allow(@htmllint.git).to receive(:modified_files).and_return(%w(index.html config.yml))
+        end
+
+        it "has 1 items" do
+          expect(targets.size).to eq(1)
+        end
+      end
+    end
   end
 end

@@ -51,7 +51,12 @@ module Danger
     end
 
     def target_files
-      ((git.modified_files - git.deleted_files) + git.added_files)
+      files = ((git.modified_files - git.deleted_files) + git.added_files)
+      result = []
+      files.each do |file|
+        result << file if file.include?(".html")
+      end
+      result
     end
 
     def parse(result)
@@ -60,10 +65,10 @@ module Danger
       result.split("\n").each do |item|
         next if item == ""
 
-        path_and_err = item.split(":")
+        path_and_err = item.split(".html:")
         next if path_and_err.length < 2
 
-        file_path = path_and_err.first
+        file_path = "#{path_and_err.first}.html"
 
         line_col_err_msg = path_and_err.last.split(", ")
         line = line_col_err_msg[0].sub("line ", "").to_i
