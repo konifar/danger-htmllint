@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Htmllint::VERSION
   spec.authors       = ['konifar']
   spec.email         = ['yahpeycoy0403@gmail.com']
-  spec.description   = %q{A short description of danger-htmllint.}
-  spec.summary       = %q{A longer description of danger-htmllint.}
+  spec.description   = %q{Danger plugin for htmllint. https://github.com/htmllint/htmllint/}
+  spec.summary       = %q{Danger plugin for htmllint.}
   spec.homepage      = 'https://github.com/konifar/danger-htmllint'
   spec.license       = 'MIT'
 
