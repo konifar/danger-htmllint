@@ -3,7 +3,7 @@
 # If you don't like these settings, just delete this file :)
 
 AllCops:
-  TargetRubyVersion: 2.0
+  TargetRubyVersion: 2.4
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
@@ -20,10 +20,10 @@ Style/BracesAroundHashParameters:
 # specs sometimes have useless assignments, which is fine
 Lint/UselessAssignment:
   Exclude:
-    - '**/spec/**/*'
+  - '**/spec/**/*'
 
 # We could potentially enable the 2 below:
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   Enabled: false
 
 Layout/AlignHash:
@@ -122,12 +122,12 @@ Layout/MultilineMethodCallIndentation:
 Metrics/BlockLength:
   Max: 345
   Exclude:
-    - "**/*_spec.rb"
+  - "**/*_spec.rb"
 
 Style/MixinGrouping:
   Enabled: false
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 
 Layout/IndentHeredoc:
@@ -149,4 +149,10 @@ PercentLiteralDelimiters:
     "%x": ()
 
 Security/YAMLLoad:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/ModuleLength:
   Enabled: false
