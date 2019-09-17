@@ -54,9 +54,12 @@ module Danger
     end
 
     def parse(result)
-      result.split("\n").flat_map do |item|
+      list = []
+      result.split("\n").each do |item|
+        next if item == ""
+
         path_and_err = item.split(":")
-        break if path_and_err.empty?
+        next if path_and_err.length < 2
 
         file_path = path_and_err.first
 
@@ -65,13 +68,15 @@ module Danger
         col = line_col_err_msg[1].sub("col ", "")
         err_msg = line_col_err_msg[2]
 
-        {
+        list << {
           file_path: file_path,
           line: line,
           severity: severity_level(fail_on_error),
           message: "#{err_msg} (col:#{col})"
         }
       end
+
+      list
     end
 
     def severity_level(fail_on_error)

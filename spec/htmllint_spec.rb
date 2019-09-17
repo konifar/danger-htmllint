@@ -20,7 +20,7 @@ module Danger
 
       context "when result has 2 errors" do
         let(:fixture) do
-          "app/index.html: line 1, col 1, tag names must be lowercase\nindex.html: line 592, col 1, indenting spaces must be used in groups of 2\n"
+          "app/index.html: line 1, col 1, tag names must be lowercase\nindex.html: line 592, col 1, indenting spaces must be used in groups of 2\n\n[htmllint] found 3 errors out of 62 files\n"
         end
 
         it "has 2 errors" do
