@@ -34,21 +34,19 @@ module Danger
 
     def htmllint_bin_path
       local = "./node_modules/.bin/htmllint"
-
-      # NOTE: Danger using method_missing hack for parse 'warn', 'fail' in Dangerfile.
-      # Same issue will occur 'message' when require 'mkmf'. Because 'mkmf' provide 'message' method.
-      # Then, disable find executable htmllint until danger fix this issue.
-
-      # File.exist?(local) ? local : find_executable("htmllint")
       raise "htmlslint not found in ./node_modules/.bin/htmllint" unless File.exist?(local)
 
       local
     end
 
-    def run_htmllint(bin, target_files)
+    def htmllint_command(bin, target_files)
       command = "#{bin} #{target_files.join(' ')}"
       command << " --rc #{rc_path}" if rc_path
-      `#{command}`
+      command
+    end
+
+    def run_htmllint(bin, target_files)
+      `#{htmllint_command(bin, target_files)}`
     end
 
     def target_files
@@ -56,18 +54,16 @@ module Danger
     end
 
     def parse(result)
-      dir = "#{Dir.pwd}/"
-
-      result.split("\n").flat_map do | line |
-        path_and_err = line.split(":")
+      result.split("\n").flat_map do |item|
+        path_and_err = item.split(":")
         break if path_and_err.empty?
 
         file_path = path_and_err.first
 
-        line_col_err_msg = path_and_err.last.split(",")
-        line = line_col_err_msg[0].sub(" line ", "")
-        col = line_col_err_msg[1].sub(" col ", "")
-        err_msg = line_col_err_msg[2].sub(/^ /, "")
+        line_col_err_msg = path_and_err.last.split(", ")
+        line = line_col_err_msg[0].sub("line ", "").to_i
+        col = line_col_err_msg[1].sub("col ", "")
+        err_msg = line_col_err_msg[2]
 
         {
           file_path: file_path,
