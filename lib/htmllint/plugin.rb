@@ -1,32 +1,87 @@
+# require "mkmf"
+require "json"
+
 module Danger
-  # This is your plugin class. Any attributes or methods you expose here will
-  # be available from within your Dangerfile.
+  # [Danger](http://danger.systems/ruby/) plugin depends on [htmllint-cli](https://github.com/htmllint/htmllint-cli/).
   #
-  # To be published on the Danger plugins site, you will need to have
-  # the public interface documented. Danger uses [YARD](http://yardoc.org/)
-  # for generating documentation from your plugin source, and you can verify
-  # by running `danger plugins lint` or `bundle exec rake spec`.
+  # @example Run htmllint and send violations as inline comment.
   #
-  # You should replace these comments with a public description of your library.
-  #
-  # @example Ensure people are well warned about merging on Mondays
-  #
-  #          my_plugin.warn_on_mondays
+  #          # Lint added and modified files only
+  #          htmllint.lint
   #
   # @see  konifar/danger-htmllint
-  # @tags monday, weekends, time, rattata
+  # @tags lint, htmllint
   #
   class DangerHtmllint < Plugin
-    # An attribute that you can read/write from your Dangerfile
-    #
-    # @return   [Array<String>]
-    attr_accessor :my_attribute
+    # .htmllintrc path
+    # @return [String]
+    attr_accessor :rc_path
 
-    # A method that you can call from your Dangerfile
-    # @return   [Array<String>]
-    #
-    def warn_on_mondays
-      warn "Trying to merge code on a Monday" if Date.today.wday == 1
+    # Set danger fail when errors are detected
+    # @return [Bool]
+    attr_accessor :fail_on_error
+
+    # Execute htmllint and send comment
+    # @return [void]
+    def lint
+      return if target_files.empty?
+
+      result = run_htmllint(htmllint_bin_path, target_files)
+      send_comment(parse(result))
+    end
+
+    private
+
+    def htmllint_bin_path
+      local = "./node_modules/.bin/htmllint"
+      raise "htmlslint not found in ./node_modules/.bin/htmllint" unless File.exist?(local)
+
+      local
+    end
+
+    def htmllint_command(bin, target_files)
+      command = "#{bin} #{target_files.join(' ')}"
+      command << " --rc #{rc_path}" if rc_path
+      command
+    end
+
+    def run_htmllint(bin, target_files)
+      `#{htmllint_command(bin, target_files)}`
+    end
+
+    def target_files
+      ((git.modified_files - git.deleted_files) + git.added_files)
+    end
+
+    def parse(result)
+      result.split("\n").flat_map do |item|
+        path_and_err = item.split(":")
+        break if path_and_err.empty?
+
+        file_path = path_and_err.first
+
+        line_col_err_msg = path_and_err.last.split(", ")
+        line = line_col_err_msg[0].sub("line ", "").to_i
+        col = line_col_err_msg[1].sub("col ", "")
+        err_msg = line_col_err_msg[2]
+
+        {
+          file_path: file_path,
+          line: line,
+          severity: severity_level(fail_on_error),
+          message: "#{err_msg} (col:#{col})"
+        }
+      end
+    end
+
+    def severity_level(fail_on_error)
+      fail_on_error ? "fail" : "warn"
+    end
+
+    def send_comment(errors)
+      errors.each do |error|
+        send(error[:severity], error[:message], file: error[:file_path], line: error[:line])
+      end
     end
   end
 end

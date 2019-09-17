@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    danger-htmllint (0.0.1)
+    danger-htmllint (0.1.0)
       danger-plugin-api (~> 1.0)
 
 GEM

@@ -11,8 +11,18 @@
 
 ## Usage
 
-    Methods and attributes from this plugin are available in
-    your `Dangerfile` under the `htmllint` namespace.
+Set Dangerfile like this.
+
+```
+# Set .htmllintrc path (optional)
+htmllint.rc_path = "/path/to/your/.htmllintrc"
+
+# Set true if you want to fail CI when errors are detected (optional)
+htmllint.fail_on_error = true
+
+# Run htmllint to only added or modified files (required)
+htmllint.lint
+```
 
 ## Development
 
