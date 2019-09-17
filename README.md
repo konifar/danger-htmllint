@@ -1,4 +1,5 @@
 # danger-htmllint
+[![Gem Version](https://badge.fury.io/rb/danger-htmllint.svg)](https://badge.fury.io/rb/danger-htmllint)
 [![](https://github.com/konifar/danger-htmllint/workflows/CI/badge.svg)](https://github.com/konifar/danger-htmllint/actions)
 
 [Danger](http://danger.systems/ruby/) plugin for [htmllint](http://htmllint.github.io/).
@@ -7,7 +8,7 @@
 
     $ gem install danger-htmllint
     
-`danger-htmllint` depends on [`htmllint-cli`]((https://github.com/htmllint/htmllint-cli)). You need to install it before running Danger.
+danger-htmllint depends on [htmllint-cli]((https://github.com/htmllint/htmllint-cli)). You need to install it before running Danger.
 
 ## Usage
 
