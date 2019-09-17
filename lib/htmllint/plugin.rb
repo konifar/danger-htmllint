@@ -42,6 +42,7 @@ module Danger
     def htmllint_command(bin, target_files)
       command = "#{bin} #{target_files.join(' ')}"
       command << " --rc #{rc_path}" if rc_path
+      p command
       command
     end
 
@@ -54,6 +55,7 @@ module Danger
     end
 
     def parse(result)
+      p result
       list = []
       result.split("\n").each do |item|
         next if item == ""
