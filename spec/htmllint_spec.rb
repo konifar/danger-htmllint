@@ -11,7 +11,7 @@ RSpec.describe 'Danger' do
       allow(@htmllint.git).to receive(:deleted_files).and_return([])
     end
 
-    describe ".parse" do
+    describe "#parse" do
       subject(:errors) do
         @htmllint.send(:parse, fixture)
       end
@@ -57,7 +57,7 @@ RSpec.describe 'Danger' do
       end
     end
 
-    describe ".htmllint_command" do
+    describe "#htmllint_command" do
       subject(:command) do
         @htmllint.send(:htmllint_command, "./node_modules/.bin/htmllint", target_files)
       end
@@ -97,7 +97,7 @@ RSpec.describe 'Danger' do
       end
     end
 
-    describe ".target_files" do
+    describe "#target_files" do
       subject(:targets) do
         @htmllint.send(:target_files)
       end
