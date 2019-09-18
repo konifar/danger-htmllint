@@ -1,5 +1,3 @@
-require File.expand_path("spec_helper", __dir__)
-
 module Danger
   describe "with Dangerfile" do
     before do
