@@ -1,4 +1,4 @@
-module Danger
+RSpec.describe 'Danger' do
   describe "with Dangerfile" do
     before do
       @dangerfile = testing_dangerfile
