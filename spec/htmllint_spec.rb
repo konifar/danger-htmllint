@@ -1,6 +1,4 @@
-require File.expand_path("spec_helper", __dir__)
-
-module Danger
+RSpec.describe 'Danger' do
   describe "with Dangerfile" do
     before do
       @dangerfile = testing_dangerfile
@@ -13,7 +11,7 @@ module Danger
       allow(@htmllint.git).to receive(:deleted_files).and_return([])
     end
 
-    describe ".parse" do
+    describe "#parse" do
       subject(:errors) do
         @htmllint.send(:parse, fixture)
       end
@@ -59,7 +57,7 @@ module Danger
       end
     end
 
-    describe ".htmllint_command" do
+    describe "#htmllint_command" do
       subject(:command) do
         @htmllint.send(:htmllint_command, "./node_modules/.bin/htmllint", target_files)
       end
@@ -99,7 +97,7 @@ module Danger
       end
     end
 
-    describe ".target_files" do
+    describe "#target_files" do
       subject(:targets) do
         @htmllint.send(:target_files)
       end
